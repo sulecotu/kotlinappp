@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.instakotlinapp.Model.UserDetails
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.EventbusDataEvents
@@ -42,11 +43,7 @@ class KayitFragment : Fragment() {
         var view= inflater.inflate(R.layout.fragment_kayit, container, false)
 
         mAuth= FirebaseAuth.getInstance()
-       //herhamgi bir kullanıcı oturum atmışsa onu sistemden çıkaran kod
-        if(mAuth.currentUser!=null){
-            mAuth.signOut()
 
-        }
         // kayıt sayfasında bulanan giriş yap kısmına tıkladığımızda bizi login kısmına yönlendirmek için
         view.tvGirisYap.setOnClickListener {
             var intent= Intent(activity,LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
@@ -99,9 +96,11 @@ class KayitFragment : Fragment() {
                                                        Toast.makeText(activity,"Oturum Açıldı",Toast.LENGTH_SHORT).show()
                                                        var kullaniciID=mAuth.currentUser!!.uid.toString()
                                                        // kullanıcı idsini alırız.
-                                                       ///oturum açan kullanıcının verilerini database kaydetme
 
-                                                       var kaydedilecekKullanici=Users(gelenEmail,sifre,kullaniciAdi,adSoyad, " "," " ,kullaniciID)
+                                                       ///oturum açan kullanıcının verilerini database kaydetme
+                                                       var kaydedilecekKullaniciDetayları=UserDetails("0","0","0","","")
+
+                                                       var kaydedilecekKullanici=Users(gelenEmail,sifre,kullaniciAdi,adSoyad, " "," " ,kullaniciID,kaydedilecekKullaniciDetayları)
                                                        mRef.child("kullanıcılar").child(kullaniciID).setValue(kaydedilecekKullanici) // veri tabanına kaydetmek için kullanıcılar ve userıd düğümü oluşturulur.
                                                            .addOnCompleteListener(object :OnCompleteListener<Void>{
                                                                override fun onComplete(p0: Task<Void>) {
@@ -164,8 +163,9 @@ class KayitFragment : Fragment() {
 
 
                                                        ///oturum açan kullanıcının verilerini database kaydetme
+                                                       var kaydedilecekKullaniciDetayları=UserDetails("0","0","0","","")
 
-                                                       var kaydedilecekKullanici=Users( " ", sifre,kullaniciAdi,adSoyad,telNo,sahteEmail,kullaniciID)
+                                                       var kaydedilecekKullanici=Users( " ", sifre,kullaniciAdi,adSoyad,telNo,sahteEmail,kullaniciID,kaydedilecekKullaniciDetayları)
                                                        mRef.child("kullanıcılar").child(kullaniciID).setValue(kaydedilecekKullanici) // veri tabanına kaydetmek için kullanıcılar ve userıd düğümü oluşturulur.
                                                            .addOnCompleteListener(object :OnCompleteListener<Void>{
                                                                override fun onComplete(p0: Task<Void>) {

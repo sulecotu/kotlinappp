@@ -1,11 +1,13 @@
 package com.example.instakotlinapp.Login
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.instakotlinapp.Home.HomeActivity
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.google.android.gms.tasks.OnCompleteListener
@@ -17,19 +19,26 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_kayit.*
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var mAuth: FirebaseAuth
+
     lateinit var mRef: DatabaseReference
+
+    lateinit var mAuth: FirebaseAuth
+    lateinit var mAuthListener:FirebaseAuth.AuthStateListener
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        setupAuthListener()
+
         mAuth = FirebaseAuth.getInstance()
         mRef = FirebaseDatabase.getInstance().reference
 
         init()
     }
+
+
 
     fun init() {
         etEmailTelorKullaniciAdi.addTextChangedListener(watcher)
@@ -46,12 +55,17 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
+
+
     }
+
 
     private fun oturumAcacakKullaniciDenetle(
         emailTelefonNumarasıKullaniciAdi: String,
         sifre: String
     ) {
+        var kullaniciBulundu=false
+
 
         /// veritabanındaki kullanıcılara eriştik ve orderbychilde ile verileri emaile göre sıralanmasını sağladık.
         mRef.child("kullanıcılar").orderByChild("email")
@@ -73,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
                             )
                         ) {
                             oturumAc(okunanKullanici, sifre, false)
+                             kullaniciBulundu=true
                             break
 
                         } else if (okunanKullanici!!.kullanici_adi!!.toString().equals(
@@ -80,6 +95,7 @@ class LoginActivity : AppCompatActivity() {
                             )
                         ) {
                             oturumAc(okunanKullanici, sifre, false)
+                             kullaniciBulundu=true
                             break
 
 
@@ -88,12 +104,17 @@ class LoginActivity : AppCompatActivity() {
                             )
                         ) {
                             oturumAc(okunanKullanici, sifre, true)
+                             kullaniciBulundu=true
                             break
 
 
                         }
 
 
+
+                    }
+                    if(kullaniciBulundu==false){
+                        Toast.makeText(this@LoginActivity,"Kullanıcı Bulunamadı",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -173,6 +194,35 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+    private fun setupAuthListener() {
+        mAuthListener=object :FirebaseAuth.AuthStateListener{
+            override fun onAuthStateChanged(p0: FirebaseAuth) {
+                var user=FirebaseAuth.getInstance().currentUser
+                if(user!=null){
+                    //kullanıcı doğrulandıysa homeaktivitye geç
+                    var intent=Intent(this@LoginActivity,HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish() //homeaktivityden geri tuşuna basınca logine geri döndürüyor
+
+                }else{
+
+                }
+
+            }
+
+        }
+    }
+    override fun onStart(){
+        super.onStart()
+        mAuth.addAuthStateListener(mAuthListener)
+    }
+    override fun onStop(){
+        super.onStop()
+        if(mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener)
+        }
     }
 
 }

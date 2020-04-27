@@ -10,9 +10,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import com.example.instakotlinapp.Home.HomeActivity
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.EventbusDataEvents
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_register.*
 import org.greenrobot.eventbus.EventBus
@@ -20,12 +22,17 @@ import org.greenrobot.eventbus.EventBus
 class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedListener {
     lateinit var manager: FragmentManager
     lateinit var  mRef: DatabaseReference
+    lateinit var mAuth: FirebaseAuth
+    lateinit var mAuthListener:FirebaseAuth.AuthStateListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        setupAuthListener()
 
         // bu tanımlamayı yapınca doğrudan database de instkotlinApp erişiriz.
+        mAuth= FirebaseAuth.getInstance()
         mRef=FirebaseDatabase.getInstance().reference
         manager = supportFragmentManager
         manager.addOnBackStackChangedListener(this)
@@ -237,5 +244,34 @@ class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChanged
         }
         return android.util.Patterns.PHONE.matcher(kontrolEdilecekTelefon).matches()
 
+    }
+    private fun setupAuthListener() {
+        //oturum açmış kullanıcı var mı varsa home aktivity açılsın
+        mAuthListener=object : FirebaseAuth.AuthStateListener{
+            override fun onAuthStateChanged(p0: FirebaseAuth) {
+                var user= FirebaseAuth.getInstance().currentUser
+                if(user!=null){
+                    //kullanıcı doğrulandıysa homeaktivitye geç
+                    var intent=Intent(this@RegisterActivity, HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
+                    finish() //homeaktivityden geri tuşuna basınca logine geri döndürüyor
+
+                }else{
+
+                }
+
+            }
+
+        }
+    }
+    override fun onStart(){
+        super.onStart()
+        mAuth.addAuthStateListener(mAuthListener)
+    }
+    override fun onStop(){
+        super.onStop()
+        if(mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener)
+        }
     }
 }

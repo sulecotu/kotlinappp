@@ -30,12 +30,9 @@ class ProfileSettingsActivity : AppCompatActivity() {
 
         }
         cıkısYap.setOnClickListener {
-            profileSettingsRoot.visibility= View.GONE
-            var transaction=supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.profileSettingsContainer,SignOutFragment())
-            transaction.addToBackStack("signoutfragment eklendi")
+          var dialog=SignOutFragment()
+            dialog.show(supportFragmentManager,"cıkısYapDialoGöster")
 
-            transaction.commit()
 
         }
 

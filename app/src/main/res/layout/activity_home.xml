@@ -14,6 +14,9 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -40,6 +43,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toStartOf="@+id/imgTabSearch"
                             app:layout_constraintStart_toEndOf="@+id/imgTabShare"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/ic_launcher_foreground"
                             tools:ignore="VectorDrawableCompat" />
 
