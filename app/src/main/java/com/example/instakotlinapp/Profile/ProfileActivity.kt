@@ -6,11 +6,16 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.instakotlinapp.Home.HomeActivity
 import com.example.instakotlinapp.Login.LoginActivity
+import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.BottomNavigationViewHelper
+import com.example.instakotlinapp.utils.EventbusDataEvents
 import com.example.instakotlinapp.utils.UniversalImageLoader
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_profile.*
+import org.greenrobot.eventbus.EventBus
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -19,6 +24,8 @@ class ProfileActivity : AppCompatActivity() {
 
     lateinit var mAuth: FirebaseAuth
     lateinit var mAuthListener:FirebaseAuth.AuthStateListener
+    lateinit var mUser:FirebaseUser
+    lateinit var mRef:DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,12 +33,56 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         setupAuthListener()
+        mRef=FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
+        mUser=mAuth.currentUser!!
 
 
         setupNavigationView()
+
         setupToolBar()
+        kullaniciBilgileriniGetir()
         setupProfilePhoto()
+
+    }
+
+    private fun kullaniciBilgileriniGetir() {
+        profillDüzenleButon.isEnabled=false
+        imgProfileSettings.isEnabled=false
+        mRef.child("kullanıcılar").child(mUser!!.uid).addValueEventListener(object :ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                if(p0!!.getValue()!=null){
+                    var okunanKullaniciBilgileri=p0!!.getValue(Users::class.java)
+
+
+                    EventBus.getDefault().postSticky(EventbusDataEvents.KullaniciBilgileriniGonder(okunanKullaniciBilgileri))
+                    profillDüzenleButon.isEnabled=true
+                    imgProfileSettings.isEnabled=true
+
+
+                    tvProfilAdiToolbar.setText(okunanKullaniciBilgileri!!.kullanici_adi)
+                    tvProfilGercekAdi.setText(okunanKullaniciBilgileri!!.ad_soyad)
+                    tvTakipciSayisi.setText((okunanKullaniciBilgileri!!.kulaniciDetaylari!!.takipciSayisi))
+                    tvTakipSayisi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.takipSayisi)
+                    tvGönderiSayisi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.gönderiSayisi)
+
+                    var imgUrl=okunanKullaniciBilgileri!!.kulaniciDetaylari!!.profilResmi!!
+                    UniversalImageLoader.setImage(imgUrl,circleProfileImage,progressBar, "")
+                    if(!okunanKullaniciBilgileri!!.kulaniciDetaylari!!.biyografi!!.isNullOrEmpty()){
+                        tvBiyografi.visibility=View.VISIBLE
+                        tvBiyografi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.biyografi!!)
+                    }
+
+                }
+
+
+            }
+
+        })
 
     }
 
@@ -75,6 +126,7 @@ class ProfileActivity : AppCompatActivity() {
         super.onBackPressed()
     }
     private fun setupAuthListener() {
+
         mAuthListener=object :FirebaseAuth.AuthStateListener{
             override fun onAuthStateChanged(p0: FirebaseAuth) {
                 var user=FirebaseAuth.getInstance().currentUser
