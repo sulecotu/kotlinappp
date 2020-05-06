@@ -38,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-
     fun setupNavigationView() {
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView)
         BottomNavigationViewHelper.setupNavigation(this, bottomNavigationView)

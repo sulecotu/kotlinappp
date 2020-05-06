@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.EventBus
 
 class ProfileActivity : AppCompatActivity() {
 
-    private val ACTIVITY_NO = 2
+    private val ACTIVITY_NO = 3
     private val TAG = "ProfileActivity"
 
     lateinit var mAuth: FirebaseAuth
