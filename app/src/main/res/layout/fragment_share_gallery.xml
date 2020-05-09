@@ -75,9 +75,10 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar3">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imgBuyukResim"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
             app:layout_constraintHeight_percent="0.6"
             android:src="@drawable/common_google_signin_btn_icon_dark"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,9 +90,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"
+            android:numColumns="4"
+            android:gravity="center"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imgBuyukResim" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
