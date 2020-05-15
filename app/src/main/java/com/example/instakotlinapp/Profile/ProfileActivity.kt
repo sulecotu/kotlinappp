@@ -38,7 +38,7 @@ class ProfileActivity : AppCompatActivity() {
         mUser=mAuth.currentUser!!
 
 
-        setupNavigationView()
+
 
         setupToolBar()
         kullaniciBilgileriniGetir()
@@ -91,6 +91,11 @@ class ProfileActivity : AppCompatActivity() {
         UniversalImageLoader.setImage(imgUrl,circleProfileImage,progressBar,"https://")
     }
 
+
+    override fun onResume() {
+        setupNavigationView()
+        super.onResume()
+    }
     //ayarlar tuşunu aktifleştirdik
     private fun setupToolBar() {
      imgProfileSettings.setOnClickListener {

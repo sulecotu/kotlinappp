@@ -32,10 +32,15 @@ class HomeActivity : AppCompatActivity() {
 
 
         initImageLoader()
-        setupNavigationView()
+
         setupHomeViewPager()
 
 
+    }
+
+    override fun onResume() {
+        setupNavigationView()
+        super.onResume()
     }
 
     fun setupNavigationView() {

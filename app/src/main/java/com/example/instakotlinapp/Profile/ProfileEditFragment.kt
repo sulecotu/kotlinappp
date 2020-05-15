@@ -30,6 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.view.*
 import kotlinx.android.synthetic.main.fragment_profile_edit.view.circleProfileImage
+import kotlinx.android.synthetic.main.fragment_yukleniyor.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.lang.Exception
@@ -77,6 +78,7 @@ class ProfileEditFragment : Fragment() {
             if (profilFotorafURI != null) {// kullanıcı galeriye başarılı bir şekilde girmiştir ve başarılı bir şekilde fotoğraf seçmiştir.
                 var dialogYukleniyor = YukleniyorFragment()
                 dialogYukleniyor.show(activity!!.supportFragmentManager, "")
+
                 dialogYukleniyor.isCancelable=false
                 mStorageRe.child("kullanıcılar").child(gelenKullaniciBilgileri!!.kullanici_id!!)
                     .child(profilFotorafURI!!.lastPathSegment!!)
