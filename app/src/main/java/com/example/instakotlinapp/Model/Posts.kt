@@ -22,6 +22,7 @@ class Posts  {
         this.photo_url = photo_url
     }
 
+
     override fun toString(): String {
         return "Posts(user_id=$user_id, post_id=$post_id, yuklenme_tarihi=$yuklenme_tarihi, acıklama=$acıklama, photo_url=$photo_url)"
     }

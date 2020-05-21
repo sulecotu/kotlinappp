@@ -63,7 +63,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
 
     //universal view
-    compile 'com.linsea:universalvideoview:1.1.0@aar'
+    implementation 'com.linsea:universalvideoview:1.1.0@aar'
 
     //crop image view
     implementation "com.naver.android.helloyako:imagecropview:1.2.3"
@@ -73,4 +73,7 @@ dependencies {
 
     ///silicompressor  dosya sıkıştırma programı
     implementation 'com.iceteck.silicompressorr:silicompressor:2.1'
+
+    //çift tıklayarak beğenme
+    implementation 'com.github.Kshitij-Jain:InstaLikeView:1.05'
 }

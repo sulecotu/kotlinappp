@@ -18,7 +18,7 @@ class NewsActivity : AppCompatActivity() {
        // setupNavigationView()
     }
 
-    fun setupNavigationView() {
+  /*  fun setupNavigationView() {
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView)
         BottomNavigationViewHelper.setupNavigation(this, bottomNavigationView)
 
@@ -26,5 +26,5 @@ class NewsActivity : AppCompatActivity() {
         var menu = bottomNavigationView.menu
         var menuItem = menu.getItem(ACTIVITY_NO)
         menuItem.isChecked = true
-    }
+    }*/
 }

@@ -8,15 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.instakotlinapp.R
 
 
-/**     Code with ❤
-╔════════════════════════════╗
-║  Created by Sibel YILDIZ   ║
-╠════════════════════════════╣
-║ sibelyldz2012@gmail.com    ║
-╠════════════════════════════╣
-║     07/03/2020 - 12:59     ║
-╚════════════════════════════╝
- */
+
 class SearchFragment : Fragment() {
 
     override fun onCreateView(

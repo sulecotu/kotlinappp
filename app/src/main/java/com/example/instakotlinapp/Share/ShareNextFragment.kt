@@ -1,6 +1,7 @@
 package com.example.instakotlinapp.Share
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.example.instakotlinapp.Home.HomeActivity
 import com.example.instakotlinapp.Model.Posts
 import com.example.instakotlinapp.Profile.YukleniyorFragment
 
@@ -76,17 +78,12 @@ class ShareNextFragment : Fragment() {
             else if(dosyaTuruResimMi==false){
                 Dosyaİslemleri.compressVideoDosya(this,secilenDosyaYolu!!)
 
-
-
             }
 
-
-
-
-
-
-
    }
+        view.imageView2.setOnClickListener {
+            this.activity!!.onBackPressed()
+        }
         return view
     }
 
@@ -99,8 +96,8 @@ class ShareNextFragment : Fragment() {
         mRef.child("posts").child(mUser.uid).child(postID!!).setValue(yuklenenPosts)
         mRef.child("posts").child(postID).child("yuklenme_tarihi").setValue(ServerValue.TIMESTAMP)
 
-
-
+            var intent = Intent(activity,HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            startActivity(intent)
 
 
     }
