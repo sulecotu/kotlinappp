@@ -175,7 +175,7 @@
             android:text="kütahya Dumlupınar Üniversitesi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvProfilGercekAdi"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
             android:id="@+id/bottomNavigationView"
@@ -199,6 +199,34 @@
             app:layout_constraintTop_toTopOf="@+id/circleProfileImage"
             tools:visibility="visible" />
 
+        <View
+            android:id="@+id/golgelik2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/golgelik"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBiyografi">
+
+        </View>
+
+        <ImageView
+            android:id="@+id/imgList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBiyografi"
+            app:srcCompat="@drawable/ic_list_view" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRecycleView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgList" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +239,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
     </FrameLayout>
 

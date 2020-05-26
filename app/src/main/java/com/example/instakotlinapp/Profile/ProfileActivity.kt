@@ -2,14 +2,18 @@ package com.example.instakotlinapp.Profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.instakotlinapp.Home.HomeActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instakotlinapp.Login.LoginActivity
+import com.example.instakotlinapp.Model.Posts
+import com.example.instakotlinapp.Model.UserPosts
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.BottomNavigationViewHelper
 import com.example.instakotlinapp.utils.EventbusDataEvents
+import com.example.instakotlinapp.utils.ProfilPostListRecylerAdapter
 import com.example.instakotlinapp.utils.UniversalImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,6 +30,7 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var mAuthListener:FirebaseAuth.AuthStateListener
     lateinit var mUser:FirebaseUser
     lateinit var mRef:DatabaseReference
+    lateinit var tumGonderiler:ArrayList<UserPosts>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +41,17 @@ class ProfileActivity : AppCompatActivity() {
         mRef=FirebaseDatabase.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
         mUser=mAuth.currentUser!!
-
+        tumGonderiler=ArrayList<UserPosts>()
 
 
 
         setupToolBar()
         kullaniciBilgileriniGetir()
+        kullaniciPostlariniGetir(mUser.uid!!)
+
+        imgList.setOnClickListener {
+            setupRecyclerView(1)
+        }
         setupProfilePhoto()
 
     }
@@ -124,6 +134,70 @@ class ProfileActivity : AppCompatActivity() {
         var menu = bottomNavigationView.menu
         var menuItem = menu.getItem(ACTIVITY_NO)
         menuItem.isChecked = true
+    }
+    private fun kullaniciPostlariniGetir(kullaniciID:String) {
+
+        mRef.child("kullanıcılar").child(kullaniciID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                var userID=kullaniciID
+                var kullaniciAdi=p0!!.getValue(Users::class.java)!!.kullanici_adi
+                var kullaniciFotoURL=p0!!.getValue(Users::class.java)!!.kulaniciDetaylari!!.profilResmi
+
+                mRef.run {
+                    child("posts").child(kullaniciID).addListenerForSingleValueEvent(object :ValueEventListener {
+                        override fun onCancelled(p0: DatabaseError) {
+
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            if (p0!!.hasChildren()) {
+                                Log.e("HATA", "ÇOCUK VAR")
+                                for (ds in p0!!.children) {
+                                    var eklenecekUserPosts=UserPosts()
+                                    eklenecekUserPosts.userID=userID
+                                    eklenecekUserPosts.userName=kullaniciAdi
+                                    eklenecekUserPosts.userPhotoURL=kullaniciFotoURL
+                                    eklenecekUserPosts.postID =
+                                        ds.getValue(Posts::class.java)!!.post_id
+                                    eklenecekUserPosts.postURL =
+                                        ds.getValue(Posts::class.java)!!.photo_url
+                                    eklenecekUserPosts.postAciklama =
+                                        ds.getValue(Posts::class.java)!!.acıklama
+
+                                    tumGonderiler.add(eklenecekUserPosts)
+
+                                }
+                            }
+
+                            setupRecyclerView(1)
+
+
+                        }
+                    })
+                }
+
+
+            }
+
+        })
+
+    }
+
+    private fun setupRecyclerView(layoutCesidi: Int) {
+            if(layoutCesidi==1){
+            var kullanıcıPostListe =profileRecycleView
+            kullanıcıPostListe.adapter=ProfilPostListRecylerAdapter(this,tumGonderiler)
+            kullanıcıPostListe.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+
+
+
+        }
+
+
     }
 
     override fun onBackPressed() {
