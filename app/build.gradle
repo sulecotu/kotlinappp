@@ -76,4 +76,7 @@ dependencies {
 
     //çift tıklayarak beğenme
     implementation 'com.github.Kshitij-Jain:InstaLikeView:1.05'
+
+    // algolia Search
+    implementation 'com.algolia:instantsearch-android:1.15.3'
 }

@@ -45,24 +45,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#B6B2B2"
-                        app:layout_constraintEnd_toStartOf="@+id/imgTabSearch"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_launcher_foreground"
                         tools:ignore="VectorDrawableCompat" />
-
-                    <ImageView
-                        android:id="@+id/imgTabSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#B6B2B2"
-                        android:src="@drawable/ic_search"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
 
                     <View
                         android:layout_width="match_parent"
